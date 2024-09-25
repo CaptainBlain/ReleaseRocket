@@ -10,11 +10,12 @@ import SwiftUI
 struct ProjectDetailSplitView: View {
     @Binding var project: Project
     var history: [ReleaseHistory]
-
+    var onSend: () -> Void
+    
     var body: some View {
         HSplitView {
             // Left Panel: Project details
-            ProjectDetailView(project: $project)  // Use @Binding to pass two-way binding
+            ProjectDetailView(project: $project, onSend: onSend)  // Use @Binding to pass two-way binding
                 .frame(minWidth: 400)
 
             // Right Panel: Release history
@@ -40,7 +41,7 @@ struct ProjectDetailSplitView_Previews: PreviewProvider {
             ReleaseHistory(projectName: "", version: "", build: "", releaseNotes: "", platform: "", author: "", featureType: "", notifyOption: "", date: Date())
         ]
         
-        return ProjectDetailSplitView(project: $sampleProject, history: sampleHistory) // Pass the binding
+        return ProjectDetailSplitView(project: $sampleProject, history: sampleHistory, onSend: {}) // Pass the binding
             .modelContainer(for: [Project.self, ReleaseHistory.self], inMemory: true) // In-memory container for both models
     }
 }

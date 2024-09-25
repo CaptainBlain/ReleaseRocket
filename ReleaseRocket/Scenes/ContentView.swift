@@ -35,7 +35,7 @@ struct ContentView: View {
                 ProjectDetailSplitView(project: Binding(
                     get: { selectedProject },
                     set: { self.selectedProject = $0 }
-                ), history: history)
+                ), history: history, onSend: sendReleaseNotes)
                 .frame(minWidth: 600, idealWidth: 800)
             } else {
                 Text("Select a project to view details")

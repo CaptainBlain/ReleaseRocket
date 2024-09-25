@@ -20,7 +20,8 @@ class AppViewModel: ObservableObject {
         }
 
         // Determine the notify option string
-        let notifyString = project.notifyOption != "None" ? "\(project.notifyOption) " : ""
+        let notifyString = project.notifyOption != "none" ? "<!\(project.notifyOption)>" : ""
+
 
         // Platform-specific message
         let platformMessage: String
@@ -38,8 +39,7 @@ class AppViewModel: ObservableObject {
         // Create the payload
         let payload: [String: Any] = [
             "text": """
-            \(notifyString)Release Notes for *\(project.name)*
-            \(platformMessage)
+            \(notifyString)\(platformMessage)
 
             *\(project.author)*
 

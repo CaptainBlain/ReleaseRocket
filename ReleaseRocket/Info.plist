@@ -3,22 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>NSAppTransportSecurity</key>
-<dict>
-    <key>NSExceptionDomains</key>
-    <dict>
-        <key>slack.com</key>
-        <dict>
-            <key>NSIncludesSubdomains</key>
-            <true/>
-            <key>NSExceptionAllowsInsecureHTTPLoads</key>
-            <false/>
-            <key>NSExceptionRequiresForwardSecrecy</key>
-            <false/>
-            <key>NSRequiresCertificateTransparency</key>
-            <false/>
-        </dict>
-    </dict>
-</dict>
-
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>slack.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<false/>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSRequiresCertificateTransparency</key>
+				<false/>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>

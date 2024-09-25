@@ -10,6 +10,7 @@ import SwiftUI
 struct ProjectDetailView: View {
  
     @Binding var project: Project  // Use @Binding for two-way binding
+    var onSend: () -> Void          // Callback for when the Send button is pressed
     
     var body: some View {
         ScrollView {  // Make the whole view scrollable
@@ -25,6 +26,7 @@ struct ProjectDetailView: View {
                             Text(platform).tag(platform)
                         }
                     }
+                    .labelsHidden()
                     .pickerStyle(SegmentedPickerStyle())  // Use Segmented style or default dropdown style
                 }
                 .padding(.bottom, 16)
@@ -75,15 +77,17 @@ struct ProjectDetailView: View {
                     .labelsHidden()
                     .pickerStyle(MenuPickerStyle())  // Use Menu style dropdown
                     TextEditor(text: $project.releaseNotes)  // Native SwiftUI TextEditor
-                            .frame(height: 100)
-                            .padding(8)  // Add padding around the TextEditor
-                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5), lineWidth: 1))
+                        .frame(height: 100)
+                        .padding(12)
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(red: 30/255, green: 30/255, blue: 30/255)))
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.9), lineWidth: 1))  // Add the border
+                    
+
                 }
                 .padding(.bottom, 16)
                 
                 Divider()  // Divider between sections
                 
-
                 // Notify Option
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Notify")
@@ -91,14 +95,26 @@ struct ProjectDetailView: View {
                         .foregroundColor(.white)
                     
                     Picker("Notify Option", selection: $project.notifyOption) {
-                        ForEach(["None", "@channel", "@here"], id: \.self) { notifyOption in
-                            Text(notifyOption).tag(notifyOption)
+                        ForEach(["none", "channel", "here"], id: \.self) { notifyOption in
+                            Text("@\(notifyOption)").tag(notifyOption)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())  // Use Segmented style or default dropdown style
                 }
                 .padding(.bottom, 16)
                 
+                // Send Button
+                Button(action: onSend) {
+                    Text("Send")
+                        .frame(height: 5)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding(.top, 16)  // Add some padding on top
             }
             .padding()
             .cornerRadius(12)
@@ -109,20 +125,24 @@ struct ProjectDetailView: View {
 }
 
 
+// MARK: - Preview for ProjectDetailView
+struct ProjectDetailView_Previews: PreviewProvider {
+    @State static var sampleProject = Project(
+        name: "Sample Project",
+        version: "1.0.0",
+        build: "100",
+        releaseNotes: "Initial release notes",
+        platform: "iOS",
+        author: "John Doe",
+        featureType: "Feature",
+        notifyOption: "None"
+    )
 
-
-
-
-//struct ProjectDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProjectDetailView(
-//            project: Project(
-//                name: "Sample Project",
-//                version: "1.0",
-//                build: "100",
-//                releaseNotes: "Initial release notes"
-//            )
-//        )
-//        .modelContainer(for: [Project.self], inMemory: true) // Preview in-memory model container
-//    }
-//}
+    static var previews: some View {
+        ProjectDetailView(project: $sampleProject, onSend: {
+            print("Send button pressed")
+        })
+        .background(Color.black)  // Background color to match the white text
+        .previewLayout(.sizeThatFits)  // Ensures it fits the screen during preview
+    }
+}
