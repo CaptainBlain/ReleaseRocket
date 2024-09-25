@@ -10,9 +10,13 @@ import SwiftData
 
 @main
 struct ReleaseRocketApp: App {
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Project.self,
+            ReleaseHistory.self,
+            AppSettings.self
+            
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
