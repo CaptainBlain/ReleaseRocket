@@ -19,6 +19,7 @@ struct ContentView: View {
     @State private var selectedProject: Project?        // To track the selected project
     @State private var showingAlert = false             // State to control alert visibility
     @State private var alertMessage = ""                // Message to show in the alert
+    @State private var isSendSuccessful = false
     
     var body: some View {
         NavigationView {
@@ -68,8 +69,12 @@ struct ContentView: View {
             SettingsView(isPresented: $showingSettings)
         }
         .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-        }
+                   Alert(
+                       title: Text(isSendSuccessful ? "Success" : "Error"),
+                       message: Text(alertMessage),
+                       dismissButton: .default(Text("OK"))
+                   )
+               }
         .frame(minWidth: 800, minHeight: 600)
     }
     
@@ -115,10 +120,16 @@ struct ContentView: View {
                         )
                         context.insert(newHistory)
                         try? context.save()  // Save the new history entry
+                        DispatchQueue.main.async {
+                            isSendSuccessful = true
+                            alertMessage = "Release notes sent successfully to Slack."
+                            showingAlert = true
+                        }
                     }
                 } else {
                     // Show an error message or alert if the Slack message failed
                     DispatchQueue.main.async {
+                        isSendSuccessful = false
                         alertMessage = "Failed to send release notes to Slack."
                         showingAlert = true
                     }
