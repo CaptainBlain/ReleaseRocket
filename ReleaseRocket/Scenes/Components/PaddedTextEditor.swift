@@ -25,8 +25,11 @@ struct PaddedTextEditor: NSViewRepresentable {
     }
 
     func updateNSView(_ nsView: NSTextView, context: Context) {
-        nsView.string = text
+        if nsView.string != text {
+            nsView.string = text
+        }
     }
+
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -41,7 +44,9 @@ struct PaddedTextEditor: NSViewRepresentable {
 
         func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? NSTextView else { return }
-            parent.text = textView.string
+            if parent.text != textView.string {  // Only update if there's an actual change
+                parent.text = textView.string
+            }
         }
     }
 }

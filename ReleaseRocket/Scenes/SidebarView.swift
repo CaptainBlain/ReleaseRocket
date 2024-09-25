@@ -31,14 +31,23 @@ struct SidebarView: View {
             Section(header: Text("Projects")) {
                 ForEach(projects) { project in
                     Label {
-                        Text("\(project.name) (\(project.platform))")  // Project name
+                        Text("\(project.name) (\(project.platform))")  // Project name and platform
                     } icon: {
-                        Image(systemName: "folder")  // You can choose any system image
-                            .foregroundColor(.gray)  // Customize the icon color if desired
+                        Image(systemName: "folder")  // System image for folder icon
+                            .foregroundColor(.gray)  // Customize icon color
                     }
                     .tag(project)  // Tag each project to track selection
+                    .contextMenu {  // Add context menu for right-click options
+                        Button(action: {
+                            if let index = projects.firstIndex(of: project) {
+                                onDeleteProject(IndexSet(integer: index))  // Call the delete function
+                            }
+                        }) {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
-                .onDelete(perform: onDeleteProject)  // Delete projects via callback
+                .onDelete(perform: onDeleteProject)  // Delete projects via callback (for swipe-to-delete)
             }
         }
         .listStyle(SidebarListStyle())                     // Make the list a sidebar style

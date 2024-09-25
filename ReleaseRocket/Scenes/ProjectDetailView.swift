@@ -74,13 +74,10 @@ struct ProjectDetailView: View {
                     }
                     .labelsHidden()
                     .pickerStyle(MenuPickerStyle())  // Use Menu style dropdown
-                    PaddedTextEditor(text: $project.releaseNotes)  // Two-way binding
-                        .frame(height: 100)
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                        )
+                    TextEditor(text: $project.releaseNotes)  // Native SwiftUI TextEditor
+                            .frame(height: 100)
+                            .padding(8)  // Add padding around the TextEditor
+                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5), lineWidth: 1))
                 }
                 .padding(.bottom, 16)
                 
